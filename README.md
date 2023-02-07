@@ -215,7 +215,7 @@ Code:
 var set number beer 99
 show log returnvalue (concat string "There are " returnvalue (var get beer) string " bottles of beer on the wall.")
 while [great returnvalue (var get beer) number 0]
-var set returnvalue knock (jseval Math.floor(Math.random() * 11))
+var set returnvalue knock (random number 1 number 10)
 if [less returnvalue (var get knock) returnvalue (var get beer)]
 var set returnvalue beer (sub returnvalue (var get beer) returnvalue (var get knock))
 show log returnvalue (concat returnvalue (var get knock) string " bottles of beer were knocked off the wall. There are now " returnvalue (var get beer) string " bottles of beer on the wall.")
