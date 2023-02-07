@@ -51,7 +51,7 @@ IF [(CONDITION)]
 ESCAPE
 ```
 
-After typing the ```if``` instruction, you place a condition between square brackets ```[ ]```. This condition is a line of WTFCode. The interpreter executes this code, and if it returns ```true```, it executes the code on the next lines. The ```if``` statement is closed with the ```ESCAPE``` instruction. Currently, the only instruction that can return a boolean is ```JSEVAL```.
+After typing the ```if``` instruction, you place a condition between square brackets ```[ ]```. This condition is a line of WTFCode. The interpreter executes this code, and if it returns ```true```, it executes the code on the next lines. The ```if``` statement is closed with the ```ESCAPE``` instruction.
 
 #### JSEVAL
 
@@ -93,6 +93,61 @@ Concatenates two or more values as a string.
 ```CONCAT [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
 
 You may concatenate as many values as you'd like, supplied as arguments, under this form.
+
+#### Math operators
+Very impractical way to do math. Here are all the math instructions. They have multiple ways to call them. The arguments are the operation terms, in order.
+
+```[ADD|SUM] [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
+
+```[SUBTRACT|SUB|DEDUCT|DED] [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
+
+```[DIVIDE|DIV] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```[MULTIPLY|MULT] [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
+
+#### Comparison instructions
+Instructions that allow you to compare values. Arguments are in comparison order. For example, ```GREAT NUMBER 5 NUMBER 2``` becomes ```5 > 2```.
+
+```[EQUALS|EQUAL|EQ] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```[LESSTHAN|LESS] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```[GREATERTHAN|GREATER|GREATTHAN|GREAT] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```[LESSTHANOREQUAL|LESSTHANEQUAL|LESSEQUAL|LESSEQ] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```[GREATERTHANOREQUAL|GREATTHANOREQUAL|GREATTHANEQUAL|GREATEQUAL|GREATEQ] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+#### Logical operators
+Time to go back to 8th grade.
+
+```NOT [DATATYPE] [VALUE]```
+
+```AND [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+```OR [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
+Both the comparison instructions and the logic operators return boolean values. To compare them to fixed values, do the comparison to ```RETURNVALUE (JSEVAL [true|false])```. I'm too lazy to add another datatype.
+
+#### WHILE
+An upgrade from the classic ```IF```. Evaluates a piece of WTFCode and takes action, repeatedly, depending on the result.
+
+```
+WHILE [(CONDITION)]
+...
+ESCAPE
+```
+
+After typing the ```while``` instruction, you place a condition between square brackets ```[ ]```. This condition is a line of WTFCode. The interpreter executes this code, and if it returns ```true```, it repeatedly executes the code on the next lines until the condition becomes false. The ```while``` statement is closed with the ```ESCAPE``` instruction.
+
+#### RANDOM
+Returns a random number in a specified range.
+
+```
+RANDOM [DATATYPE] [VALUE] [DATATYPE] [VALUE]
+```
+
+The first parameter is the minimum, and the second is the maximum.
 
 ### Examples
 Here are some examples so you can see WTFCode in action.
@@ -150,7 +205,54 @@ You could wait it out, though...
 
 Notes:
 
-I was trying to come up with another example program, but realized I didn't implement native variable comparison instructions yet. So here is a program that shows how I have less than 5 braincells (randomized) because of that, and shows a random message, telling you to either wait it out, as it can get better, or that there's no point in waiting.
+~I was trying to come up with another example program, but realized I didn't implement native variable comparison instructions yet. So here is a program that shows how I have less than 5 braincells (randomized) because of that, and shows a random message, telling you to either wait it out, as it can get better, or that there's no point in waiting.~
 
-# WTFCode 1.1.2
+They're released now! Yay!
+
+#### 99 Bottles of Beer
+Code:
+```
+var set number beer 99
+show log returnvalue (concat string "There are " returnvalue (var get beer) string " bottles of beer on the wall.")
+while [great returnvalue (var get beer) number 0]
+var set returnvalue knock (jseval Math.floor(Math.random() * 11))
+if [less returnvalue (var get knock) returnvalue (var get beer)]
+var set returnvalue beer (sub returnvalue (var get beer) returnvalue (var get knock))
+show log returnvalue (concat returnvalue (var get knock) string " bottles of beer were knocked off the wall. There are now " returnvalue (var get beer) string " bottles of beer on the wall.")
+escape
+if [not returnvalue (less returnvalue (var get knock) returnvalue (var get beer))]
+show log returnvalue (concat string "The last " returnvalue (var get beer) string " bottles of beer were knocked off the wall. There are now no bottles of beer on the wall.")
+var set number beer 0
+escape
+escape
+```
+
+Output:
+```
+LOG: There are 99 bottles of beer on the wall.
+LOG: 10 bottles of beer were knocked off the wall. There are now 89 bottles of beer on the wall.
+LOG: 2 bottles of beer were knocked off the wall. There are now 87 bottles of beer on the wall.
+LOG: 8 bottles of beer were knocked off the wall. There are now 79 bottles of beer on the wall.
+LOG: 5 bottles of beer were knocked off the wall. There are now 74 bottles of beer on the wall.
+LOG: 4 bottles of beer were knocked off the wall. There are now 70 bottles of beer on the wall.
+LOG: 4 bottles of beer were knocked off the wall. There are now 66 bottles of beer on the wall.
+LOG: 4 bottles of beer were knocked off the wall. There are now 62 bottles of beer on the wall.
+LOG: 7 bottles of beer were knocked off the wall. There are now 55 bottles of beer on the wall.
+LOG: 3 bottles of beer were knocked off the wall. There are now 52 bottles of beer on the wall.
+LOG: 3 bottles of beer were knocked off the wall. There are now 49 bottles of beer on the wall.
+LOG: 1 bottles of beer were knocked off the wall. There are now 48 bottles of beer on the wall.
+LOG: 3 bottles of beer were knocked off the wall. There are now 45 bottles of beer on the wall.
+LOG: 10 bottles of beer were knocked off the wall. There are now 35 bottles of beer on the wall.
+LOG: 10 bottles of beer were knocked off the wall. There are now 25 bottles of beer on the wall.
+LOG: 6 bottles of beer were knocked off the wall. There are now 19 bottles of beer on the wall.
+LOG: 9 bottles of beer were knocked off the wall. There are now 10 bottles of beer on the wall.
+LOG: 8 bottles of beer were knocked off the wall. There are now 2 bottles of beer on the wall.
+LOG: The last 2 bottles of beer were knocked off the wall. There are now no bottles of beer on the wall.
+```
+
+Notes:
+
+Randomly yeets bottles of beer off the wall until there's none left. A good demo for math, comparison and logic operators.
+
+# WTFCode 1.2.2
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
