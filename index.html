@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>WTFCode</title>
     <script type="text/javascript">
-      // WTFCode by Asicosilomu. Version 1.1.2.
+      // WTFCode by Asicosilomu. Version 1.2.2.
       // TEH LANGUAGE OF TEH GODS!1!1!1!!!1!!!!!1!111!!
 
       window.WTFCode = {};
@@ -38,12 +38,14 @@
           } else if (instruction.toUpperCase() == "IF")
           {
             var condition = line.trim().substr(instruction.length + 2, line.trim().length - 5);
-            var toExec = "";
+            var toExec = ""; var depth = 1;
             i++;
-            while (line.split(" ")[0].toUpperCase() != "ESCAPE" && i < lines.length)
+            while (depth > 0 && i < lines.length)
             {
               line = lines[i];
-              if (line.split(" ")[0].toUpperCase() != "ESCAPE") { toExec += line + "\n"; };
+              if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE") depth++;
+              if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
+              if (depth > 0) { toExec += line + "\n"; };
               i++;
             };
             i--;
@@ -87,7 +89,180 @@
             params = parseParams(params);
             for (i2 = 1; i2 < params.length - 1; i2 += 2) { if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin += params[i2].toString(); } else { fin += window.WTFCode.evaluate(params[i2].toString(), variables).toString(); }; };
             returnValue = fin;
-          }
+          } else if (instruction.toUpperCase() == "ADD" || instruction.toUpperCase() == "SUM")
+          {
+            var i2 = 1; var s = line.split(" "); var fin = 0;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            for (i2 = 1; i2 < params.length - 1; i2 += 2) { if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin += Number(params[i2]); } else { fin += Number(window.WTFCode.evaluate(params[i2].toString(), variables)); }; };
+            returnValue = fin;
+          } else if (instruction.toUpperCase() == "SUBTRACT" || instruction.toUpperCase() == "SUB" || instruction.toUpperCase() == "DEDUCT" || instruction.toUpperCase() == "DED")
+          {
+            var i2 = 1; var s = line.split(" "); var fin = 0;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params); i2 = 1;
+            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin = Number(params[i2]); } else { fin = Number(window.WTFCode.evaluate(params[i2].toString(), variables)); };
+            for (i2 = 3; i2 < params.length - 1; i2 += 2) { if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin -= Number(params[i2]); } else { fin -= Number(window.WTFCode.evaluate(params[i2].toString(), variables)); }; };
+            returnValue = fin;
+          } else if (instruction.toUpperCase() == "DIVIDE" || instruction.toUpperCase() == "DIV")
+          {
+            var i2 = 1; var s = line.split(" "); var fin = 0;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params); i2 = 1;
+            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin = Number(params[i2]); } else { fin = Number(window.WTFCode.evaluate(params[i2].toString(), variables)); }; i2 += 2;
+            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin /= Number(params[i2]); } else { fin /= Number(window.WTFCode.evaluate(params[i2].toString(), variables)); };
+            returnValue = fin;
+          } else if (instruction.toUpperCase() == "MULTIPLY" || instruction.toUpperCase() == "MULT")
+          {
+            var i2 = 1; var s = line.split(" "); var fin = 1;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            for (i2 = 1; i2 < params.length - 1; i2 += 2) { if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin *= Number(params[i2]); } else { fin *= Number(window.WTFCode.evaluate(params[i2].toString(), variables)); }; };
+            returnValue = fin;
+          } else if (instruction.toUpperCase() == "EQUALS" || instruction.toUpperCase() == "EQUAL" || instruction.toUpperCase() == "EQ")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = a == b;
+          } else if (instruction.toUpperCase() == "LESSTHAN" || instruction.toUpperCase() == "LESS")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = a < b;
+          } else if (instruction.toUpperCase() == "GREATERTHAN" || instruction.toUpperCase() == "GREATER" || instruction.toUpperCase() == "GREATTHAN" || instruction.toUpperCase() == "GREAT")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = a > b;
+          } else if (instruction.toUpperCase() == "LESSTHANOREQUAL" || instruction.toUpperCase() == "LESSTHANEQUAL" || instruction.toUpperCase() == "LESSEQUAL" || instruction.toUpperCase() == "LESSEQ")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = a <= b;
+          } else if (instruction.toUpperCase() == "GREATERTHANOREQUAL" || instruction.toUpperCase() == "GREATTHANOREQUAL" || instruction.toUpperCase() == "GREATTHANEQUAL" || instruction.toUpperCase() == "GREATEQUAL" || instruction.toUpperCase() == "GREATEQ")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = a >= b;
+          } else if (instruction.toUpperCase() == "WHILE")
+          {
+            var condition = line.trim().substr(instruction.length + 2, line.trim().length - 8);
+            var toExec = ""; var depth = 1;
+            i++;
+            while (depth > 0 && i < lines.length)
+            {
+              line = lines[i];
+              if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE") depth++;
+              if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
+              if (depth > 0) { toExec += line + "\n"; };
+              i++;
+            };
+            i--;
+            while (window.WTFCode.evaluate(condition, variables)) { var response = window.WTFCode.evaluate(toExec, variables); if (response != null) { return response; break; }; };
+          } else if (instruction.toUpperCase() == "NOT" || instruction.toUpperCase() == "INVERSE")
+          {
+            var i2 = 1; var s = line.split(" "); var val = null;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1]; } else { val = window.WTFCode.evaluate(params[1].toString(), variables); };
+            if (params[0].toUpperCase() == "NUMBER") { val = Number(val); };
+            returnValue = !val;
+          } else if (instruction.toUpperCase() == "AND")
+          {
+            var i2 = 1; var s = line.split(" "); var a, b;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { a = params[1]; } else { a = window.WTFCode.evaluate(params[1].toString(), variables); };
+            if (params[0].toUpperCase() == "NUMBER") { a = Number(a); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3].toString(), variables); };
+            if (params[2].toUpperCase() == "NUMBER") { b = Number(b); };
+            returnValue = a && b;
+          } else if (instruction.toUpperCase() == "OR")
+          {
+            var i2 = 1; var s = line.split(" "); var a, b;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { a = params[1]; } else { a = window.WTFCode.evaluate(params[1].toString(), variables); };
+            if (params[0].toUpperCase() == "NUMBER") { a = Number(a); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3].toString(), variables); };
+            if (params[2].toUpperCase() == "NUMBER") { b = Number(b); };
+            returnValue = a || b;
+          };
         };
         return returnValue;
       };
