@@ -187,10 +187,10 @@ Tells you your lucky numbers. Randomized!
 #### asicosilomu dumb idiot
 Code:
 ```
-var set returnvalue braincells (jseval Math.floor(Math.random() * 6))
+var set returnvalue braincells (random number 1 number 5)
 show warn returnvalue (concat string "Asicosilomu has " returnvalue (var get braincells) string " braincells.")
 show info string "This is because they have yet to implement native comparison instructions, which means that comparison can only be done using jseval on fixed values, but variables cannot be compared."
-if [jseval (Math.floor(Math.random() * 2) == 1)]
+if [eq returnvalue (random number 1 number 2) number 2]
 return string "You could wait it out, though..."
 escape
 return string "There's no point in waiting."
