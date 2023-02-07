@@ -155,7 +155,7 @@ Here are some examples so you can see WTFCode in action.
 #### Drinks
 Code:
 ```
-return returnvalue (concat returnvalue (jseval Math.floor(Math.random() * 100)) string " people walk into a bar. Each of them orders " returnvalue (jseval Math.floor(Math.random() * 100)) string " drinks. But there's only " returnvalue (jseval Math.floor(Math.random() * 100)) string " people working at the bar, and they can't handle that madness!")
+return returnvalue (concat returnvalue (random number 1 number 100) string " people walk into a bar. Each of them orders " returnvalue (random number 1 number 100) string " drinks. But there's only " returnvalue (random number 1 number 100) string " people working at the bar, and they can't handle that madness!")
 ```
 
 Output:
@@ -170,8 +170,8 @@ Outputs a preset text about drinks, with randomized numbers.
 #### Lucky Numbers
 Code: 
 ```
-var set returnvalue a (jseval Math.floor(Math.random() * 100))
-var set returnvalue b (jseval Math.floor(Math.random() * 100))
+var set returnvalue a (random number 1 number 100)
+var set returnvalue b (random number 1 number 100)
 return returnvalue (concat string "Your lucky numbers are " returnvalue (var get a) string " and " returnvalue (var get b) string ".")
 ```
 
