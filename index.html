@@ -262,6 +262,19 @@
             if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3].toString(), variables); };
             if (params[2].toUpperCase() == "NUMBER") { b = Number(b); };
             returnValue = a || b;
+          } else if (instruction.toUpperCase() == "RANDOM")
+          {
+            var i2 = 1; var s = line.split(" "); var a, b;
+            var logLevel = s[1].toLowerCase();
+            var params = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables)); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables)); };
+            returnValue = Math.floor(Math.random() * (b - a + 1) + a);
           };
         };
         return returnValue;
