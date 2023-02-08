@@ -62,7 +62,7 @@ Evaluates a line of JavaScript and returns the code's return value.
 This snippet of JavaScript may only be something that can be put inside a ```return``` statement. If you want to write something more advanced to pass to ```JSEVAL```, try ```Function(...)()```.
 
 #### RETURN
-Returns a value from the code. This immediately terminates your program, and the returned value may be accessed from JavaScript, from where the interpreter was called.
+Returns a value from the code. This immediately terminates your program, and the returned value may be accessed from JavaScript, from where the interpreter was called. Or, if you're ```return```ing from a function, that function will be terminated and you'll be able to access the return value from your code.
 
 ```RETURN [DATATYPE] [VALUE]```
 
