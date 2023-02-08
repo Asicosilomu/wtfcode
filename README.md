@@ -5,7 +5,7 @@ WTFCode. A very bare-bones, and very impractical programming language, with an i
 Because I want to.
 
 # How?
-WTFCode is a language that focuses more on words than other characters. The language is meant to be as impractical as possible. Below you can find some documentation for the language that I wrote in a quick rush.
+WTFCode is a language that focuses more on words than other characters. The language is meant to be as impractical as possible. Below you can find some documentation for the language that I wrote ~in a quick rush~.
 
 ### Syntax
 Each line in WTFCode represents an instruction. They must be on separate lines, if the medium does not allow, use ```\n```.
@@ -105,6 +105,8 @@ Very impractical way to do math. Here are all the math instructions. They have m
 
 ```[MULTIPLY|MULT] [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
 
+```[MODULUS|MODULO|MOD] [DATATYPE] [VALUE] [DATATYPE] [VALUE]```
+
 #### Comparison instructions
 Instructions that allow you to compare values. Arguments are in comparison order. For example, ```GREAT NUMBER 5 NUMBER 2``` becomes ```5 > 2```.
 
@@ -148,6 +150,77 @@ RANDOM [DATATYPE] [VALUE] [DATATYPE] [VALUE]
 ```
 
 The first parameter is the minimum, and the second is the maximum.
+
+#### FLOOR
+Shaves the decimal points off of a number.
+
+```
+FLOOR [DATATYPE] [VALUE]
+```
+
+For example, specifying the number ```69.420``` will return ```69```.
+
+#### UPPER & LOWER
+Two instructions to change the case of a string.
+
+```UPPER [DATATYPE] [VALUE]```
+
+```LOWER [DATATYPE] [VALUE]```
+
+```UPPER``` will turn a string to uppercase. ```I love Cats so much!``` turns into ```I LOVE CATS SO MUCH!```.
+
+```LOWER``` will turn a string to lowercase. ```I LOVE CATS so much!``` turns into ```i love cats so much!```.
+
+### Functions
+
+#### Defining a Function
+A Function is a piece of code that can be called from elsewhere in the program, just like a built-in instruction. Here is the syntax for function definition.
+
+```
+FUNCTION [NAME] [(ARGUMENTS)]
+...
+ESCAPE
+```
+
+Here, ```[NAME]``` is the name of the function. In ```(ARGUMENTS)```, you'll specify the arguments that your function will take, under this syntax: ```[DATATYPE] [NAME] [DATATYPE] [NAME] ...```. The arguments can be accessed inside the function as variables, by their ```[NAME]```, so, like ```VAR GET [NAME]```. If you specify an argument with the name of a variable outside the function, you won't be able to use the variable *inside* the function, as it will be overriden. The value outside will not be affected, even if you change it from inside. Yes, scopes!
+
+If you wish to not specify arguments, just omit that part. You can use ```FUNCTION [NAME] []``` or just ```FUNCTION [NAME]```. You'll then write your function code, and to close it off, like usual, use the ```ESCAPE``` instruction. By the way, I know what you're thinking, no, built-in instructions cannot be overriden.
+
+#### Calling a Function
+You can call your new Function anywhere in the program, *but only after its definition*. To do that, just call it as any other instruction. Any additional arguments you provide that the function does not request are ignored. Omitting arguments will make their value inside the function ```undefined```.
+
+```[NAME] [DATATYPE] [VALUE] [DATATYPE] [VALUE] ...```
+
+#### Example Function
+Here is a simple function that takes in a number, and returns its value times 10:
+
+```
+FUNCTION MULT10 [NUMBER NR]
+RETURN RETURNVALUE (MULT RETURNVALUE (VAR GET NR) NUMBER 10)
+ESCAPE
+```
+
+And to call it:
+
+```
+MULT10 NUMBER 69
+```
+
+Which will return ```690```.
+
+### Comments
+Glad you made it this far! The WTFCode interpreter ignores lines whose first word is not a valid instruction. Though, it's best practice to always start comments with a symbol or random gibberish, as none of those will ever become instructions. A symbol which I like using is ```#```.
+
+Here are some examples of comments:
+
+```
+For loops may soon be added to WTFCode.
+The comment above me is an example of how you shouldn't write comments. For loops will indeed be added at some point, and the FOR at the beginning will be interpreted as a valid instruction, breaking the program.
+# The comment above me is very safe, as there's no way I'm ever adding a "the" instruction. But you might. Functions are a thing.
+// The comment above me is infinitely safe, as its first "word" is a symbol, and I will never add instructions containing non-alphanumeric characters.
+-- Same for the one above me
+? Can you guess the programming languages which use the comment prefixes of the last three comments? I challenge you. By the way, no language will let you start a comment with "?". That one is just for fun.
+```
 
 ### Examples
 Here are some examples so you can see WTFCode in action.
@@ -253,6 +326,120 @@ LOG: The last 2 bottles of beer were knocked off the wall. There are now no bott
 Notes:
 
 Randomly yeets bottles of beer off the wall until there's none left. A good demo for math, comparison and logic operators.
+
+#### Digits Together
+Code:
+```
+var set number nr 6969
+var set number sum 0
+while [great returnvalue (var get nr) number 0]
+var set returnvalue digit (mod returnvalue (var get nr) number 10)
+var set returnvalue sum (add returnvalue (var get sum) returnvalue (var get digit))
+var set returnvalue nr (floor returnvalue (div returnvalue (var get nr) number 10))
+escape
+return returnvalue (var get sum)
+```
+
+Output:
+```
+30
+```
+
+Notes:
+
+A program that calculates the sum of all of a number's digits. The number is declared in the variable on the first line.
+
+#### Username Generator
+Code:
+```
+var set returnvalue iadjective (random number 1 number 5)
+var set returnvalue inoun (random number 1 number 5)
+if [eq returnvalue (var get iadjective) number 1]
+var set string adjective "Optimistic"
+escape
+if [eq returnvalue (var get iadjective) number 2]
+var set string adjective "Amazing"
+escape
+if [eq returnvalue (var get iadjective) number 3]
+var set string adjective "Tactical"
+escape
+if [eq returnvalue (var get iadjective) number 4]
+var set string adjective "Generous"
+escape
+if [eq returnvalue (var get iadjective) number 5]
+var set string adjective "Interesting"
+escape
+if [eq returnvalue (var get inoun) number 1]
+var set string noun "Potato"
+escape
+if [eq returnvalue (var get inoun) number 2]
+var set string noun "Fisher"
+escape
+if [eq returnvalue (var get inoun) number 3]
+var set string noun "Kitten"
+escape
+if [eq returnvalue (var get inoun) number 4]
+var set string noun "Debugger"
+escape
+if [eq returnvalue (var get inoun) number 5]
+var set string noun "Player"
+escape
+return returnvalue (concat returnvalue (var get adjective) returnvalue (var get noun))
+```
+
+Output:
+```
+TacticalPotato
+```
+
+Notes:
+
+A simple username generator.
+
+# Equation Randomizer
+Code:
+```
+# Configurations
+var set number min 0
+var set number max 1000
+
+# Function to get a random number in the range configured
+function getRandomFR
+return returnvalue (random returnvalue (var get min) returnvalue (var get max))
+escape
+
+# Function to render the equation itself
+function renderEquation [number a number b number otype]
+if [eq returnvalue (var get otype) number 1]
+var set returnvalue result (add returnvalue (var get a) returnvalue (var get b))
+var set string symbol " + "
+escape
+if [eq returnvalue (var get otype) number 2]
+var set returnvalue result (sub returnvalue (var get a) returnvalue (var get b))
+var set string symbol " - "
+escape
+if [eq returnvalue (var get otype) number 3]
+var set returnvalue result (mult returnvalue (var get a) returnvalue (var get b))
+var set string symbol " * "
+escape
+if [eq returnvalue (var get otype) number 4]
+var set returnvalue result (div returnvalue (var get a) returnvalue (var get b))
+var set string symbol " / "
+escape
+return returnvalue (concat returnvalue (var get a) returnvalue (var get symbol) returnvalue (var get b) string " = " returnvalue (var get result))
+escape
+
+return returnvalue (renderEquation returnvalue (getRandomFR) returnvalue (getRandomFR) returnvalue (random number 1 number 4))
+```
+
+Output:
+```
+446 * 901 = 401846
+```
+
+Notes:
+
+Program that spits out a random math equation with one of the four basic operators (+, -, *, /) and two terms.
 
 # WTFCode 1.2.2
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
