@@ -18,7 +18,7 @@
         var i = 0;
         for (i = 0; i < lines.length; i++)
         {
-          var line = lines[i];
+          var line = lines[i].trim();
           var instruction = line.split(" ")[0];
           if (instruction.toUpperCase() == "SHOW")
           {
