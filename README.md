@@ -441,5 +441,5 @@ Notes:
 
 Program that spits out a random math equation with one of the four basic operators (+, -, *, /) and two terms.
 
-# WTFCode 1.2.2
+# WTFCode 1.2.6
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
