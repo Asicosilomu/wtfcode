@@ -396,7 +396,7 @@ Notes:
 
 A simple username generator.
 
-# Equation Randomizer
+#### Equation Randomizer
 Code:
 ```
 # Configurations
