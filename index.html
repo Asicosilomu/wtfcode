@@ -44,7 +44,7 @@
             i++;
             while (depth > 0 && i < lines.length)
             {
-              line = lines[i];
+              line = lines[i].trim();
               if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
               if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
               if (depth > 0) { toExec += line + "\n"; };
@@ -226,7 +226,7 @@
             i++;
             while (depth > 0 && i < lines.length)
             {
-              line = lines[i];
+              line = lines[i].trim();
               if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
               if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
               if (depth > 0) { toExec += line + "\n"; };
@@ -334,7 +334,7 @@
             i++;
             while (depth > 0 && i < lines.length)
             {
-              line = lines[i];
+              line = lines[i].trim();
               if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
               if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
               if (depth > 0) { toSave += line + "\n"; };
