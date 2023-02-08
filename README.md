@@ -441,5 +441,28 @@ Notes:
 
 Program that spits out a random math equation with one of the four basic operators (+, -, *, /) and two terms.
 
+#### Quine
+Code:
+```
+var set returnvalue input (jseval `return returnvalue (concat string "var set returnvalue input " returnvalue (jseval String.fromCharCode(40)) string "jseval " returnvalue (jseval String.fromCharCode(96)) returnvalue (var get input) returnvalue (jseval String.fromCharCode(96)) returnvalue (jseval String.fromCharCode(41)) returnvalue (jseval String.fromCharCode(10)) returnvalue (var get input))`)
+return returnvalue (concat string "var set returnvalue input " returnvalue (jseval String.fromCharCode(40)) string "jseval " returnvalue (jseval String.fromCharCode(96)) returnvalue (var get input) returnvalue (jseval String.fromCharCode(96)) returnvalue (jseval String.fromCharCode(41)) returnvalue (jseval String.fromCharCode(10)) returnvalue (var get input))
+```
+
+Output:
+```
+var set returnvalue input (jseval `return returnvalue (concat string "var set returnvalue input " returnvalue (jseval String.fromCharCode(40)) string "jseval " returnvalue (jseval String.fromCharCode(96)) returnvalue (var get input) returnvalue (jseval String.fromCharCode(96)) returnvalue (jseval String.fromCharCode(41)) returnvalue (jseval String.fromCharCode(10)) returnvalue (var get input))`)
+return returnvalue (concat string "var set returnvalue input " returnvalue (jseval String.fromCharCode(40)) string "jseval " returnvalue (jseval String.fromCharCode(96)) returnvalue (var get input) returnvalue (jseval String.fromCharCode(96)) returnvalue (jseval String.fromCharCode(41)) returnvalue (jseval String.fromCharCode(10)) returnvalue (var get input))
+```
+
+Notes:
+
+A quine, named after the philosopher W. V. O. Quine, is a program that prints its own source code. One of the typical challenges of any new esoteric programming language is to write a quine other than the null program in it.
+
+Often a program that just performs access to its own source code (reading it either from memory or from a disk file) and prints it out is considered "cheating".
+
+The language Muriel is based on the idea of quines.
+
+*Source: [Quine - Esolang](https://esolangs.org/wiki/Quine)*
+
 # WTFCode 1.2.6
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
