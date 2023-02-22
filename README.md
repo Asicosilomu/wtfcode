@@ -467,5 +467,5 @@ The language Muriel is based on the idea of quines.
 
 *Source: [Quine - Esolang](https://esolangs.org/wiki/Quine)*
 
-# WTFCode 1.2.6
+# WTFCode 1.3.6
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
