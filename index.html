@@ -4,17 +4,31 @@
     <meta charset="utf-8">
     <title>WTFCode</title>
     <script type="text/javascript">
-      // WTFCode by Asicosilomu. Version 1.2.6.
+      // WTFCode by Asicosilomu. Version 1.3.6.
       // TEH LANGUAGE OF TEH GODS!1!1!1!!!1!!!!!1!111!!
 
+      // WTFCode modules(TM) Extend WTFCode functionality with WTFCode!
+      var modules = {
+        "dialogs": `
+          function alert [string text]
+              return returnvalue (ecfjs returnvalue (prop get returnvalue (jseval window) string "alert") returnvalue (var get text))
+          escape
+
+          function confirm [string text]
+              return returnvalue (ecfjs returnvalue (prop get returnvalue (jseval window) string "confirm") returnvalue (var get text))
+          escape
+
+          function prompt [string text string dvalue]
+              return returnvalue (ecfjs returnvalue (prop get returnvalue (jseval window) string "prompt") returnvalue (var get text) returnvalue (var get dvalue))
+          escape
+        `
+      }
+
       window.WTFCode = {};
-      window.WTFCode.evaluate = function(code, variables, functions, isFunction)
+      window.WTFCode.evaluate = function(code = `throw string "You must specify a program to run!"`, variables = {}, functions = {}, isFunction = false)
       {
         var lines = code.split("\n");
         var returnValue = null;
-        if (variables, functions) {} else { var variables = {}; };
-        if (functions) {} else { var functions = {}; };
-        if (isFunction) {} else { var isFunction = false; };
         var i = 0;
         for (i = 0; i < lines.length; i++)
         {
@@ -39,19 +53,9 @@
             if (stuff[0].toUpperCase() == "RETURNVALUE") { throw new Error(window.WTFCode.evaluate(stuff[1], variables, functions)); } else { throw new Error(stuff[1]); };
           } else if (instruction.toUpperCase() == "IF")
           {
-            var condition = line.trim().substr(instruction.length + 2, line.trim().length - 5);
-            var toExec = ""; var depth = 1;
-            i++;
-            while (depth > 0 && i < lines.length)
-            {
-              line = lines[i].trim();
-              if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
-              if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
-              if (depth > 0) { toExec += line + "\n"; };
-              i++;
-            };
-            i--;
-            if (window.WTFCode.evaluate(condition, variables, functions)) { var response = window.WTFCode.evaluate(toExec, variables, functions); if (response != null) { return response; }; };
+            var data = parsestat(lines, line, instruction, i);
+            i = data.i;
+            if (window.WTFCode.evaluate(data.condition, variables, functions)) { var response = window.WTFCode.evaluate(data.toExec, variables, functions); if (response != null) { return response; }; };
           } else if (instruction.toUpperCase() == "JSEVAL")
           {
             var condition = " ";
@@ -78,6 +82,35 @@
             {
               var thing = parseParams(dataType + " " + line.substr(instruction.length + 1 + mode.length + 1 + dataType.length + 1 + spl[3].length + 1, line.length - 1));
               if (thing[0].toUpperCase() == "RETURNVALUE") { variables[spl[3]] = window.WTFCode.evaluate(thing[1], variables, functions); } else { variables[spl[3]] = thing[1]; };
+            };
+          } else if (instruction.toUpperCase() == "DOM")
+          {
+            var spl = line.split(" ");
+            var mode = spl[1];
+            var dataType = spl[2];
+            if (mode.toUpperCase() == "CREATE")
+            {
+              var thing = parseParams(dataType + " " + spl[3]);
+              if (thing[0].toUpperCase() == "RETURNVALUE") { var name = window.WTFCode.evaluate(thing[1], variables, functions); } else { var name = thing[1]; };
+              returnValue = document.createElement(name.toString());
+            };
+          } else if (instruction.toUpperCase() == "PROPERTY" || instruction.toUpperCase() == "PROP")
+          {
+            var spl = line.split(" ");
+            var mode = spl[1]; var i2 = 0;
+            var thing = "";
+            for (i2 = 2; i2 < spl.length; i2++) thing += spl[i2] + " ";
+            thing = parseParams(thing);
+            if (thing[0].toUpperCase() == "RETURNVALUE") { var object = window.WTFCode.evaluate(thing[1], variables, functions); } else { var object = thing[1]; };
+            if (thing[2].toUpperCase() == "RETURNVALUE") { var prop = window.WTFCode.evaluate(thing[3], variables, functions); } else { var prop = thing[3]; };
+            if (thing[4]) { if (thing[4].toUpperCase() == "RETURNVALUE") { var val = window.WTFCode.evaluate(thing[5], variables, functions); } else { var val = thing[5]; }; };
+            if (mode.toUpperCase() == "GET")
+            {
+              returnValue = object[prop];
+            };
+            if (mode.toUpperCase() == "SET")
+            {
+              object[prop] = val;
             };
           } else if (instruction.toUpperCase() == "CONCAT")
           {
@@ -118,17 +151,8 @@
             returnValue = fin;
           } else if (instruction.toUpperCase() == "DIVIDE" || instruction.toUpperCase() == "DIV")
           {
-            var i2 = 1; var s = line.split(" "); var fin = 0;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params); i2 = 1;
-            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin = Number(params[i2]); } else { fin = Number(window.WTFCode.evaluate(params[i2].toString(), variables, functions)); }; i2 += 2;
-            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin /= Number(params[i2]); } else { fin /= Number(window.WTFCode.evaluate(params[i2].toString(), variables, functions)); };
-            returnValue = fin;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a / nums.b;
           } else if (instruction.toUpperCase() == "MULTIPLY" || instruction.toUpperCase() == "MULT")
           {
             var i2 = 1; var s = line.split(" "); var fin = 1;
@@ -143,17 +167,8 @@
             returnValue = fin;
           } else if (instruction.toUpperCase() == "MODULUS" || instruction.toUpperCase() == "MODULO" || instruction.toUpperCase() == "MOD")
           {
-            var i2 = 1; var s = line.split(" "); var fin = 0;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params); i2 = 1;
-            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin = Number(params[i2]); } else { fin = Number(window.WTFCode.evaluate(params[i2].toString(), variables, functions)); }; i2 += 2;
-            if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fin %= Number(params[i2]); } else { fin %= Number(window.WTFCode.evaluate(params[i2].toString(), variables, functions)); };
-            returnValue = fin;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a % nums.b;
           } else if (instruction.toUpperCase() == "EQUALS" || instruction.toUpperCase() == "EQUAL" || instruction.toUpperCase() == "EQ")
           {
             var i2 = 1; var s = line.split(" ");
@@ -164,76 +179,30 @@
               params += s[i2] + " ";
             };
             params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
+            if (params[0].toUpperCase() != "RETURNVALUE") { var a = params[1]; } else { var a = window.WTFCode.evaluate(params[1].toString(), variables, functions); };
+            if (params[2].toUpperCase() != "RETURNVALUE") { var b = params[3]; } else { var b = window.WTFCode.evaluate(params[3].toString(), variables, functions); };
             returnValue = a == b;
           } else if (instruction.toUpperCase() == "LESSTHAN" || instruction.toUpperCase() == "LESS")
           {
-            var i2 = 1; var s = line.split(" ");
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
-            returnValue = a < b;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a < nums.b;
           } else if (instruction.toUpperCase() == "GREATERTHAN" || instruction.toUpperCase() == "GREATER" || instruction.toUpperCase() == "GREATTHAN" || instruction.toUpperCase() == "GREAT")
           {
-            var i2 = 1; var s = line.split(" ");
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
-            returnValue = a > b;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a > nums.b;
           } else if (instruction.toUpperCase() == "LESSTHANOREQUAL" || instruction.toUpperCase() == "LESSTHANEQUAL" || instruction.toUpperCase() == "LESSEQUAL" || instruction.toUpperCase() == "LESSEQ")
           {
-            var i2 = 1; var s = line.split(" ");
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
-            returnValue = a <= b;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a <= nums.b;
           } else if (instruction.toUpperCase() == "GREATERTHANOREQUAL" || instruction.toUpperCase() == "GREATTHANOREQUAL" || instruction.toUpperCase() == "GREATTHANEQUAL" || instruction.toUpperCase() == "GREATEQUAL" || instruction.toUpperCase() == "GREATEQ")
           {
-            var i2 = 1; var s = line.split(" ");
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
-            returnValue = a >= b;
+            var nums = parse2num(line, variables, functions);
+            returnValue = nums.a >= nums.b;
           } else if (instruction.toUpperCase() == "WHILE")
           {
-            var condition = line.trim().substr(instruction.length + 2, line.trim().length - 8);
-            var toExec = ""; var depth = 1;
-            i++;
-            while (depth > 0 && i < lines.length)
-            {
-              line = lines[i].trim();
-              if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
-              if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
-              if (depth > 0) { toExec += line + "\n"; };
-              i++;
-            };
-            i--;
-            while (window.WTFCode.evaluate(condition, variables, functions)) { var response = window.WTFCode.evaluate(toExec, variables, functions); if (response != null) { return response; break; }; };
+            var data = parsestat(lines, line, instruction, i);
+            i = data.i;
+            while (window.WTFCode.evaluate(data.condition, variables, functions)) { var response = window.WTFCode.evaluate(data.toExec, variables, functions); if (response != null) { return response; break; }; };
           } else if (instruction.toUpperCase() == "NOT" || instruction.toUpperCase() == "INVERSE")
           {
             var i2 = 1; var s = line.split(" "); var val = null;
@@ -244,52 +213,20 @@
               params += s[i2] + " ";
             };
             params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1]; } else { val = window.WTFCode.evaluate(params[1].toString(), variables, functions); };
-            if (params[0].toUpperCase() == "NUMBER") { val = Number(val); };
+            if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1]; } else { val = window.WTFCode.evaluate(params[1], variables, functions); };
             returnValue = !val;
           } else if (instruction.toUpperCase() == "AND")
           {
-            var i2 = 1; var s = line.split(" "); var a, b;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { a = params[1]; } else { a = window.WTFCode.evaluate(params[1].toString(), variables, functions); };
-            if (params[0].toUpperCase() == "NUMBER") { a = Number(a); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3].toString(), variables, functions); };
-            if (params[2].toUpperCase() == "NUMBER") { b = Number(b); };
-            returnValue = a && b;
+            var data = parsean(line, variables, functions);
+            returnValue = data.a && data.b;
           } else if (instruction.toUpperCase() == "OR")
           {
-            var i2 = 1; var s = line.split(" "); var a, b;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { a = params[1]; } else { a = window.WTFCode.evaluate(params[1].toString(), variables, functions); };
-            if (params[0].toUpperCase() == "NUMBER") { a = Number(a); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3].toString(), variables, functions); };
-            if (params[2].toUpperCase() == "NUMBER") { b = Number(b); };
-            returnValue = a || b;
+            var data = parsean(line, variables, functions);
+            returnValue = data.a || data.b;
           } else if (instruction.toUpperCase() == "RANDOM")
           {
-            var i2 = 1; var s = line.split(" "); var a, b;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { var a = Number(params[1]); } else { var a = Number(window.WTFCode.evaluate(params[1].toString(), variables, functions)); };
-            if (params[2].toUpperCase() != "RETURNVALUE") { var b = Number(params[3]); } else { var b = Number(window.WTFCode.evaluate(params[3].toString(), variables, functions)); };
-            returnValue = Math.floor(Math.random() * (b - a + 1) + a);
+            var nums = parse2num(line, variables, functions);
+            returnValue = Math.floor(Math.random() * (nums.b - nums.a + 1) + nums.a);
           } else if (instruction.toUpperCase() == "FLOOR")
           {
             var i2 = 1; var s = line.split(" "); var val = null;
@@ -304,28 +241,10 @@
             returnValue = Math.floor(val);
           } else if (instruction.toUpperCase() == "UPPER")
           {
-            var i2 = 1; var s = line.split(" "); var val = null;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1].toString(); } else { val = window.WTFCode.evaluate(params[1].toString(), variables, functions).toString(); };
-            returnValue = val.toUpperCase();
+            returnValue = parseul(line, variables, functions).toUpperCase();
           } else if (instruction.toUpperCase() == "LOWER")
           {
-            var i2 = 1; var s = line.split(" "); var val = null;
-            var logLevel = s[1].toLowerCase();
-            var params = "";
-            for (i2 = 1; i2 < s.length; i2++)
-            {
-              params += s[i2] + " ";
-            };
-            params = parseParams(params);
-            if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1].toString(); } else { val = window.WTFCode.evaluate(params[1].toString(), variables, functions).toString(); };
-            returnValue = val.toLowerCase();
+            returnValue = parseul(line, variables, functions).toLowerCase();
           } else if (instruction.toUpperCase() == "FUNCTION")
           {
             var name = line.split(" ")[1];
@@ -345,11 +264,42 @@
             funcObj.code = toSave;
             funcObj.params = params;
             functions[name] = funcObj;
+          } else if (instruction.toUpperCase() == "EXECCHILDFUNCJS" || instruction.toUpperCase() == "ECFJS")
+          {
+            var i2 = 1; var s = line.split(" ");
+            var params = ""; var fpars = []; var pstr = "";
+            for (i2 = 1; i2 < s.length; i2++)
+            {
+              params += s[i2] + " ";
+            };
+            params = parseParams(params);
+            if (params[0].toUpperCase() == "RETURNVALUE") { var fn = window.WTFCode.evaluate(params[1], variables, functions); } else { var fn = params[1]; };
+            for (i2 = 3; i2 < params.length - 1; i2 += 2) { if (params[i2 - 1].toUpperCase() != "RETURNVALUE") { fpars.push(params[i2]); } else { fpars.push(window.WTFCode.evaluate(params[i2].toString(), variables, functions)); }; };
+            if (typeof fn == "function") { returnValue = fn.apply(null, fpars); } else { throw new Error("First argument must be js function! (ecfjs)"); };
+          } else if (instruction.toUpperCase() == "IMPORT" || instruction.toUpperCase() == "INCLUDE")
+          {
+            var path = line.substr(instruction.length + 1, (line.length - instruction.length));
+            // check if path is local
+            if (path.toLowerCase().split("/")[0] == "local")
+            {
+              var module = path.toLowerCase().split("/")[1];
+              // it exis?
+              if (modules[module])
+              {
+                window.WTFCode.evaluate(modules[module], variables, functions);
+              } else {
+                console.warn("Module " + path + " couldn't load! Does it exis???");
+              };
+            } else {
+              throw new Error("Remote modules are not supported you dumb idiot");
+            };
           } else if (functions[instruction])
           {
             var i2 = 0;
             var func = functions[instruction];
-            var varObj = structuredClone(variables);
+            var varObj = {}; var entries = Object.entries(variables);
+            // structuredclone hates functions :((((((((
+            for (i2 = 0; i2 < entries.length; i2++) varObj[entries[i2][0]] = entries[i2][1];
             var params = parseParams(line.substr(instruction.length + 1, (line.length - instruction.length + 1)));
             var reqps = func.params.split(" ");
             for (i2 = 0; i2 < reqps.length; i2 += 2)
@@ -370,6 +320,74 @@
         return returnValue;
       };
 
+      // Auxiliary functions to avoid repetition
+
+      // Used by upper/lower
+      function parseul(line, variables, functions)
+      {
+        var i2 = 1; var s = line.split(" "); var val = null;
+        var logLevel = s[1].toLowerCase();
+        var params = "";
+        for (i2 = 1; i2 < s.length; i2++)
+        {
+          params += s[i2] + " ";
+        };
+        params = parseParams(params);
+        if (params[0].toUpperCase() != "RETURNVALUE") { val = params[1].toString(); } else { val = window.WTFCode.evaluate(params[1].toString(), variables, functions).toString(); };
+        return val;
+      };
+
+      // Used by instructions that take two numbers as arguments
+      function parse2num(line, variables, functions)
+      {
+        var i2 = 1; var s = line.split(" "); var a, b;
+        var logLevel = s[1].toLowerCase();
+        var params = "";
+        for (i2 = 1; i2 < s.length; i2++)
+        {
+          params += s[i2] + " ";
+        };
+        params = parseParams(params);
+        if (params[0].toUpperCase() != "RETURNVALUE") { var a = params[1]; } else { var a = window.WTFCode.evaluate(params[1], variables, functions); };
+        if (params[2].toUpperCase() != "RETURNVALUE") { var b = params[3]; } else { var b = window.WTFCode.evaluate(params[3], variables, functions); };
+        return {"a": a, "b": b};
+      };
+
+      // for and/or
+      function parsean(line, variables, functions)
+      {
+        var i2 = 1; var s = line.split(" "); var a, b;
+        var logLevel = s[1].toLowerCase();
+        var params = "";
+        for (i2 = 1; i2 < s.length; i2++)
+        {
+          params += s[i2] + " ";
+        };
+        params = parseParams(params);
+        if (params[0].toUpperCase() != "RETURNVALUE") { a = params[1]; } else { a = window.WTFCode.evaluate(params[1], variables, functions); };
+        if (params[2].toUpperCase() != "RETURNVALUE") { b = params[3]; } else { b = window.WTFCode.evaluate(params[3], variables, functions); };
+        return {"a": a, "b": b};
+      };
+
+      // for if/while
+      function parsestat(lines, line, instruction, i)
+      {
+        var condition = line.trim().substr(instruction.length + 2, line.trim().length - (instruction.length + 3));
+        var toExec = ""; var depth = 1;
+        i++;
+        while (depth > 0 && i < lines.length)
+        {
+          line = lines[i].trim();
+          if (line.split(" ")[0].toUpperCase() == "IF" || line.split(" ")[0].toUpperCase() == "WHILE" || line.split(" ")[0].toUpperCase() == "FUNCTION") depth++;
+          if (line.split(" ")[0].toUpperCase() == "ESCAPE") depth--;
+          if (depth > 0) { toExec += line + "\n"; };
+          i++;
+        };
+        i--;
+        return {"condition": condition, "toExec": toExec, "i": i};
+      };
+
+      // Function for parsing parameters passed to instructions
       function parseParams(params)
       {
         var pars = params.split(" "); var i = 0;
