@@ -263,7 +263,7 @@
             var funcObj = {};
             funcObj.code = toSave;
             funcObj.params = params;
-            functions[name] = funcObj;
+            functions[name.toLowerCase()] = funcObj;
           } else if (instruction.toUpperCase() == "EXECCHILDFUNCJS" || instruction.toUpperCase() == "ECFJS")
           {
             var i2 = 1; var s = line.split(" ");
@@ -293,10 +293,10 @@
             } else {
               throw new Error("Remote modules are not supported you dumb idiot");
             };
-          } else if (functions[instruction])
+          } else if (functions[instruction.toLowerCase()])
           {
             var i2 = 0;
-            var func = functions[instruction];
+            var func = functions[instruction.toLowerCase()];
             var varObj = {}; var entries = Object.entries(variables);
             // structuredclone hates functions :((((((((
             for (i2 = 0; i2 < entries.length; i2++) varObj[entries[i2][0]] = entries[i2][1];
