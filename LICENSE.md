@@ -6,9 +6,9 @@
 The creators of this Work (“The Licensor”) grant permission to any person, group or legal entity that doesn't violate the prohibitions below (“The User”), to do everything with this Work that would otherwise infringe their copyright or any patent claims, subject to the following conditions:
 
 ## Obligations
-The User must give appropriate credit to the Licensor, provide a copy of this license or a (clickable, if the medium allows) link to oql.avris.it/license/v1.1, and indicate whether and what kind of changes were made. The User may do so in any reasonable manner, but not in any way that suggests the Licensor endorses the User or their use.
-Prohibitions
+The User must give appropriate credit to the Licensor, provide a copy of this license or a (clickable, if the medium allows) link to https://oql.avris.it/license/v1.1, and indicate whether and what kind of changes were made. The User may do so in any reasonable manner, but not in any way that suggests the Licensor endorses the User or their use.
 
+## Prohibitions
 No one may use this Work for prejudiced or bigoted purposes, including but not limited to: racism, xenophobia, queerphobia, queer exclusionism, homophobia, transphobia, enbyphobia, misogyny.
 
 No one may use this Work to inflict or facilitate violence or abuse of human rights as defined in the Universal Declaration of Human Rights.
