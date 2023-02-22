@@ -7,6 +7,9 @@ Because I want to.
 # How?
 WTFCode is a language that focuses more on words than other characters. The language is meant to be as impractical as possible. Below you can find some documentation for the language that I wrote ~in a quick rush~.
 
+# WARNING!
+The documentation below is outdated. You can find the latest version here: https://esolangs.org/wiki/WTFCode
+
 ### Syntax
 Each line in WTFCode represents an instruction. They must be on separate lines, if the medium does not allow, use ```\n```.
 Each line must begin with the name of the instruction, which may be just one word. What follows are, optionally, parameters for that instruction.
