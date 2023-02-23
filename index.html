@@ -266,7 +266,7 @@
       }
 
       window.WTFCode = {};
-      window.WTFCode.evaluate = function(code = `throw string "You must specify a program to run!"`, variables = {}, functions = {}, isFunction = false)
+      window.WTFCode.evaluate = function(code = `import local/exception\nthrow string "You must specify a program to run!"`, variables = {}, functions = {}, isFunction = false)
       {
         var lines = code.split("\n");
         var returnValue = null;
