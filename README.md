@@ -22,7 +22,7 @@ After that, create your script. It must be an inline script, as remote sources a
 <script type="text/wtfcode">
   include local/ostream
   show log string "Hello, World!"
- </script>
+</script>
  ```
  
  Type your code within the script tags. Have fun!
