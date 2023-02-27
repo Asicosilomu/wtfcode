@@ -250,9 +250,9 @@ var modules = {
         include local/string
         var set returnvalue func (prop get returnvalue (jseval console) returnvalue (lower returnvalue (var get mode)))
         ecfjs returnvalue (var get func) returnvalue (var get str)
-        escape
+    escape
 
-        function show_chain [mode mode]
+    function show_chain [mode mode]
         include local/comparison
         include local/property
         include local/string
