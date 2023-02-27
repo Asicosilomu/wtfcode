@@ -216,8 +216,8 @@ var modules = {
         if [eq returnvalue (lower returnvalue (var get mode)) string "set"]
             return returnvalue (ecfjs returnvalue (jseval function(o, p, v){return o[p] = v;}) returnvalue (var get object) returnvalue (var get property) returnvalue (var get value))
         escape
-        escape
-        function prop [mode mode any object string property any value]
+    escape
+    function prop [mode mode any object string property any value]
         include local/string
         if [eq returnvalue (lower returnvalue (var get mode)) string "get"]
             return returnvalue (property get returnvalue (var get object) returnvalue (var get property))
