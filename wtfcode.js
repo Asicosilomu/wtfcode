@@ -1,4 +1,4 @@
-// WTFCode by Asicosilomu. Version 1.5.0.
+// WTFCode by Asicosilomu. Version 1.5.5.
 // TEH LANGUAGE OF TEH GODS!1!1!1!!!1!!!!!1!111!!
 
 // WTFCode modules(TM) Extend WTFCode functionality with WTFCode!
@@ -79,6 +79,54 @@ var modules = {
     escape
     function inverse [any val]
         return returnvalue (not returnvalue (var get val))
+    escape
+
+    function and
+        include local/comparison
+        include local/exception
+        include local/array
+        include local/math
+        var set returnvalue func (jseval function(a,b){return a&&b;})
+        var set returnvalue len (array length returnvalue (var get arguments))
+        var set returnvalue res (jseval true)
+        if [less returnvalue (var get len) number 2]
+            throw string "'AND' operator requires two or more arguments!"
+        escape
+        if [eq returnvalue (var get len) number 2]
+            return returnvalue (ecfjs returnvalue (var get func) returnvalue (array get returnvalue (var get arguments) number 0) returnvalue (array get returnvalue (var get arguments) number 1))
+        escape
+        if [great returnvalue (var get len) number 2]
+            var set number i 0
+            while [less returnvalue (var get i) returnvalue (array length returnvalue (var get arguments))]
+                var set returnvalue res (ecfjs returnvalue (var get func) returnvalue (var get res) returnvalue (array get returnvalue (var get arguments) returnvalue (var get i)))
+                var set returnvalue i (add returnvalue (var get i) number 1)
+            escape
+            return returnvalue (var get res)
+        escape
+    escape
+
+    function or
+        include local/comparison
+        include local/exception
+        include local/array
+        include local/math
+        var set returnvalue func (jseval function(a,b){return a||b;})
+        var set returnvalue len (array length returnvalue (var get arguments))
+        var set returnvalue res (array get returnvalue (var get arguments) number 0)
+        if [less returnvalue (var get len) number 2]
+            throw string "'OR' operator requires two or more arguments!"
+        escape
+        if [eq returnvalue (var get len) number 2]
+            return returnvalue (ecfjs returnvalue (var get func) returnvalue (array get returnvalue (var get arguments) number 0) returnvalue (array get returnvalue (var get arguments) number 1))
+        escape
+        if [great returnvalue (var get len) number 2]
+            var set number i 1
+            while [less returnvalue (var get i) returnvalue (array length returnvalue (var get arguments))]
+                var set returnvalue res (ecfjs returnvalue (var get func) returnvalue (var get res) returnvalue (array get returnvalue (var get arguments) returnvalue (var get i)))
+                var set returnvalue i (add returnvalue (var get i) number 1)
+            escape
+            return returnvalue (var get res)
+        escape
     escape
 `,
 "string": `
@@ -216,8 +264,8 @@ var modules = {
         if [eq returnvalue (lower returnvalue (var get mode)) string "set"]
             return returnvalue (ecfjs returnvalue (jseval function(o, p, v){return o[p] = v;}) returnvalue (var get object) returnvalue (var get property) returnvalue (var get value))
         escape
-    escape
-    function prop [mode mode any object string property any value]
+        escape
+        function prop [mode mode any object string property any value]
         include local/string
         if [eq returnvalue (lower returnvalue (var get mode)) string "get"]
             return returnvalue (property get returnvalue (var get object) returnvalue (var get property))
@@ -245,24 +293,24 @@ var modules = {
     escape
 `,
 "ostream": `
-    function show [mode mode any str]
-        include local/property
-        include local/string
-        var set returnvalue func (prop get returnvalue (jseval console) returnvalue (lower returnvalue (var get mode)))
-        ecfjs returnvalue (var get func) returnvalue (var get str)
-    escape
-
-    function show_chain [mode mode]
+    function show [mode mode]
         include local/comparison
         include local/property
         include local/string
         include local/array
         include local/math
+        include local/dialogs
         var set returnvalue func (prop get returnvalue (jseval console) returnvalue (lower returnvalue (var get mode)))
-        var set number i 0
-        while [less returnvalue (var get i) returnvalue (array length returnvalue (var get arguments))]
-            ecfjs returnvalue (var get func) returnvalue (array get returnvalue (var get arguments) returnvalue (var get i))
-            var set returnvalue i (add returnvalue (var get i) number 1)
+        var set returnvalue len (array length returnvalue (var get arguments))
+        if [great returnvalue (var get len) number 1]
+            var set number i 0
+            while [less returnvalue (var get i) returnvalue (array length returnvalue (var get arguments))]
+                ecfjs returnvalue (var get func) returnvalue (array get returnvalue (var get arguments) returnvalue (var get i))
+                var set returnvalue i (add returnvalue (var get i) number 1)
+            escape
+        escape
+        if [lesseq returnvalue (var get len)) number 1]
+            ecfjs returnvalue (var get func) returnvalue (array get returnvalue (var get arguments) number 0)
         escape
     escape
 `,
@@ -337,7 +385,7 @@ for (i = 0; i < lines.length; i++)
         {
         if (pars[i - 1].toUpperCase() == "RETURNVALUE") pars[i] = window.WTFCode.evaluate(pars[i], variables, functions, false, false);
         };
-        pars[1][pars[3].toString()] = function(){window.WTFCode.evaluate(pars[5].toString(), proc.variables, proc.functions, false, false)};
+        pars[1][pars[3].toString()] = function(){window.WTFCode.evaluate(pars[5].toString(), variables, functions, false, false)};
     };
     } else if (instruction.toUpperCase() == "EQUALS" || instruction.toUpperCase() == "EQUAL" || instruction.toUpperCase() == "EQ")
     {
@@ -357,14 +405,6 @@ for (i = 0; i < lines.length; i++)
     var data = parsestat(lines, line, instruction, i);
     i = data.i;
     while (window.WTFCode.evaluate(data.condition, variables, functions, false, false)) { var response = window.WTFCode.evaluate(data.toExec, variables, functions, false, false); if (response != null) { return response; break; }; };
-    } else if (instruction.toUpperCase() == "AND")
-    {
-    var data = parsean(line, variables, functions);
-    returnValue = data.a && data.b;
-    } else if (instruction.toUpperCase() == "OR")
-    {
-    var data = parsean(line, variables, functions);
-    returnValue = data.a || data.b;
     } else if (instruction.toUpperCase() == "FUNCTION")
     {
     var name = line.split(" ")[1];
@@ -406,12 +446,21 @@ for (i = 0; i < lines.length; i++)
         // it exis?
         if (modules[module])
         {
-        window.WTFCode.evaluate(modules[module], variables, functions, false, false);
+            window.WTFCode.evaluate(modules[module], variables, functions, false, false);
         } else {
-        console.warn("Module " + path + " couldn't load! Does it exis???");
+            console.warn("Module " + path + " couldn't load! Does it exis???");
         };
     } else {
-        throw new Error("Remote modules are not supported you dumb idiot");
+        // Fetch a remote module...
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", path, false);
+        xhr.send();
+
+        if (xhr.status === 200) {
+            window.WTFCode.evaluate(xhr.responseText, variables, functions, false, false);
+        } else {
+            console.warn("Failed to load remote module from \"" + path + "\". Request failed with status " + xhr.status.toString() + ". It may still be possible to continue normally, but expect script errors.");
+        }
     };
     } else if (functions[instruction.toLowerCase()])
     {
