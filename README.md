@@ -27,5 +27,5 @@ After that, create your script. It must be an inline script, as remote sources a
  
  Type your code within the script tags. Have fun!
 
-# WTFCode 1.5.0
+# WTFCode 1.5.5
 A terrible "programming" language by Asicosilomu. This is just the interpreter.
